@@ -225,6 +225,45 @@ INSERT INTO `tr_siswa_mapel` (`id`, `id_siswa`, `id_mapel`) VALUES
 	(8, 5, 3),
 	(9, 5, 4);
 /*!40000 ALTER TABLE `tr_siswa_mapel` ENABLE KEYS */;
+
+
+-- Dumping structure for trigger 2015_db_cat.hapus_guru
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `hapus_guru` AFTER DELETE ON `m_guru` FOR EACH ROW BEGIN
+DELETE FROM m_admin WHERE m_admin.level = 'guru' AND m_admin.kon_id = OLD.id;
+DELETE FROM m_soal WHERE m_soal.id_guru = OLD.id;
+DELETE FROM tr_guru_mapel WHERE tr_guru_mapel.id_guru = OLD.id;
+DELETE FROM tr_guru_tes WHERE tr_guru_tes.id_guru = OLD.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+
+-- Dumping structure for trigger 2015_db_cat.hapus_mapel
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `hapus_mapel` AFTER DELETE ON `m_mapel` FOR EACH ROW BEGIN
+DELETE FROM m_soal WHERE m_soal.id_mapel = OLD.id;
+DELETE FROM tr_guru_mapel WHERE tr_guru_mapel.id_mapel = OLD.id;
+DELETE FROM tr_guru_tes WHERE tr_guru_tes.id_mapel = OLD.id;
+DELETE FROM tr_siswa_mapel WHERE tr_siswa_mapel.id_mapel = OLD.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+
+-- Dumping structure for trigger 2015_db_cat.hapus_siswa
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `hapus_siswa` AFTER DELETE ON `m_siswa` FOR EACH ROW BEGIN
+DELETE FROM tr_ikut_ujian WHERE tr_ikut_ujian.id_user = OLD.id;
+DELETE FROM tr_siswa_mapel WHERE tr_siswa_mapel.id_siswa = OLD.id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
