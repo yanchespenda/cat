@@ -1,7 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Adm extends CI_Controller {
+date_default_timezone_set("Asia/Jakarta");
 
+class Adm extends CI_Controller {
+	
+	function __construct() {
+	        parent::__construct();
+	        $this->db->query("SET time_zone='+7:00'");
+	}
+    
 	public function cek_aktif() {
 		if ($this->session->userdata('admin_valid') == false && $this->session->userdata('admin_id') == "") {
 			redirect('adm/login');
