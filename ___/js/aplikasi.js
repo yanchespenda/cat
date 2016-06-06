@@ -23,6 +23,8 @@ function m_soal_e(id) {
 		success: function(data) {
 			$("#id").val(data.id);
 			//$("#id_mapel").val(data.id_mapel);
+			$("#bobot").val(data.bobot);
+			$("#id_guru").val(data.id_guru);
 			$("#soal").val(data.soal);
 			$("#opsi_a").val(data.opsi_a);
 			$("#opsi_b").val(data.opsi_b);
