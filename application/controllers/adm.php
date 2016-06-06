@@ -759,7 +759,7 @@ class Adm extends CI_Controller {
 				$cek_jwb 	= $this->db->query("SELECT bobot, jawaban FROM m_soal WHERE id = '".$p->$_tidsoal."'")->row();
 				if ($cek_jwb->jawaban == $jawaban_) {
 					$jumlah_benar++;
-					$jumlah_bobot += $cek_jwb->bobot;
+					$jumlah_bobot = $jumlah_bobot + $cek_jwb->bobot;
 				}
 				$update_	.= "".$p->$_tidsoal.":".$jawaban_.",";
 			}
