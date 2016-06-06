@@ -334,7 +334,12 @@ class Adm extends CI_Controller {
 		$a['p_guru'] = obj_to_array($this->db->query("SELECT * FROM m_guru")->result(), "id,nama");
 
 		if ($uri3 == "det") {
-			$a = $this->db->query("SELECT * FROM m_soal WHERE id = '$uri4'")->row();
+			if ($uri4 != "0") {
+				$a = $this->db->query("SELECT * FROM m_soal WHERE id = '$uri4'")->row_array();
+			} else {
+				$a = array("id"=>"","id_guru"=>$a['sess_konid'],"id_mapel"=>"","bobot"=>"1","gambar"=>"","soal"=>"","opsi_a"=>"","opsi_b"=>"","opsi_c"=>"","opsi_d"=>"","opsi_e"=>"","jawaban"=>"","tgl_input"=>"");
+			}
+			
 			$this->j($a);
 			exit();
 		} else if ($uri3 == "hapus_gambar") {
