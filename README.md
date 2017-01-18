@@ -15,4 +15,3 @@ Aplikasi Ujian Online, adalah aplikasi yang digunakan untuk melakukan proses uji
 1. Admin, merupakan level tertinggi dari aplikasi, bisa memanej data : guru/dosen,  siswa, mata pelajaran, soal, lihat hasil ujian
 2. Guru, mempunyai akses, bisa memanage data : soal, daftar ujian, dan melihat hasil ujian
 3. Siswa, mempunya akses, bisa mengikuti ujian, sesuai dengan mata pelajaran yang ia ikuti, yang diatur oleh  level admin, dan melihat hasil ujian.
-
