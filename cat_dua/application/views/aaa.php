@@ -79,6 +79,7 @@ if ($this->uri->segment(2) == "m_soal" && $this->uri->segment(3) == "edit") {
 <script type="text/javascript">
 var base_url = "<?php echo base_url(); ?>";
 var editor_style = "<?php echo $this->config->item('editor_style'); ?>";
+var uri_js = "<?php echo $this->config->item('uri_js'); ?>";
 </script>
 <script src="<?php echo base_url(); ?>___/js/aplikasi.js"></script> 
 
