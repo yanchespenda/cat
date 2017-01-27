@@ -1,9 +1,8 @@
 $(document).ready(function() {
 	
-
-	var url = get_url(3);
-	var url2 = get_url(4);
-	var url3 = get_url(5);
+	var url = get_url(uri_js);
+	var url2 = get_url((uri_js+1));
+	var url3 = get_url((uri_js+2));
 	//console.log(url);
 
 	if (url == "m_siswa") {
