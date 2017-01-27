@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $config['jml_opsi']			= 4;			//isi dengan pilihan opsi jawaban, HARUS <= 5
+$config['uri_js']			= 4;			//klo datatables nggak jalan, bisa diubah angkanya > 3
 $config['editor_style']		= "replace";	//pilihannya "inline" atau "replace";
 $config['nama_aplikasi']	= "CAT - Computer Assisted Test";
 $config['versi']			= "2.0";
