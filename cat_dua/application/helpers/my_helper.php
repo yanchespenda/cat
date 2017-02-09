@@ -2,32 +2,36 @@
 
 /* fungsi non database */
 function tjs ($tgl, $tipe) {
-	$pc_satu	= explode(" ", $tgl);
-	if (count($pc_satu) < 2) {	
-		$tgl1		= $pc_satu[0];
-		$jam1		= "";
+	if ($tgl != "0000-00-00 00:00:00") {
+		$pc_satu	= explode(" ", $tgl);
+		if (count($pc_satu) < 2) {	
+			$tgl1		= $pc_satu[0];
+			$jam1		= "";
+		} else {
+			$jam1		= $pc_satu[1];
+			$tgl1		= $pc_satu[0];
+		}
+
+		$pc_dua		= explode("-", $tgl1);
+		$tgl		= $pc_dua[2];
+		$bln		= $pc_dua[1];
+		$thn		= $pc_dua[0];
+
+		$bln_pendek		= array("Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des");
+		$bln_panjang	= array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+
+		$bln_angka		= intval($bln) - 1;
+
+		if ($tipe == "l") {
+			$bln_txt = $bln_panjang[$bln_angka];
+		} else if ($tipe == "s") {
+			$bln_txt = $bln_pendek[$bln_angka];
+		}
+
+		return $tgl." ".$bln_txt." ".$thn."  ".$jam1;
 	} else {
-		$jam1		= $pc_satu[1];
-		$tgl1		= $pc_satu[0];
+		return "Tgl Salah";
 	}
-	
-	$pc_dua		= explode("-", $tgl1);
-	$tgl		= $pc_dua[2];
-	$bln		= $pc_dua[1];
-	$thn		= $pc_dua[0];
-	
-	$bln_pendek		= array("Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des");
-	$bln_panjang	= array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
-	
-	$bln_angka		= intval($bln) - 1;
-	
-	if ($tipe == "l") {
-		$bln_txt = $bln_panjang[$bln_angka];
-	} else if ($tipe == "s") {
-		$bln_txt = $bln_pendek[$bln_angka];
-	}
-	
-	return $tgl." ".$bln_txt." ".$thn."  ".$jam1;
 }
 
 function hari($wekday) {
@@ -84,7 +88,7 @@ function tambah_jam_sql($menit) {
 
 function bersih($data, $pil) {
 	//return mysql_real_escape_string 
-	return mysql_real_escape_string($data->$pil);
+	return $data->$pil;
 }
 
 
