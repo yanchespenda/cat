@@ -222,7 +222,6 @@ SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
 DELIMITER //
 CREATE TRIGGER `hapus_siswa` AFTER DELETE ON `m_siswa` FOR EACH ROW BEGIN
 DELETE FROM tr_ikut_ujian WHERE tr_ikut_ujian.id_user = OLD.id;
-DELETE FROM tr_siswa_mapel WHERE tr_siswa_mapel.id_siswa = OLD.id;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
