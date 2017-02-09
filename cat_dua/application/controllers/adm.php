@@ -230,7 +230,7 @@ class Adm extends CI_Controller {
 				$ket = "edit";
 			} else {
 				$ket = "tambah";
-				$this->db->query("INSERT INTO m_guru VALUES (null, '".bersih($p,"nama")."')");
+				$this->db->query("INSERT INTO m_guru VALUES (null, '".bersih($p,"nip")."', '".bersih($p,"nama")."')");
 			}
 			
 			$ret_arr['status'] 	= "ok";
