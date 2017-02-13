@@ -848,8 +848,8 @@ class Adm extends CI_Controller {
 				$are['terlambat'] = $a->terlambat;
 				$are['jenis'] = $a->jenis;
 				$are['detil_jenis'] = $a->detil_jenis;
-				//$are['tgl_mulai'] = $pc_tgl[2]."/".$pc_tgl[1]."/".$pc_tgl[0]." ".substr($pc_waktu[1],0,5);
-				$are['tgl_mulai'] = $a->tgl_mulai;
+				$are['tgl_mulai'] = $pc_waktu[0];
+				$are['wkt_mulai'] = substr($pc_waktu[1],0,5);
 				$are['token'] = $a->token;
 			} else {
 				$are['id'] = "";
@@ -861,7 +861,8 @@ class Adm extends CI_Controller {
 				$are['terlambat'] = "";
 				$are['jenis'] = "";
 				$are['detil_jenis'] = "";
-				$are['tgl_mulai'] = "0000-00-00 00:00";
+				$are['tgl_mulai'] = "";
+				$are['wkt_mulai'] = "";
 				$are['token'] = "";
 			}
 
@@ -869,11 +870,12 @@ class Adm extends CI_Controller {
 			exit();
 		} else if ($uri3 == "simpan") {
 			$ket 	= "";
+
 			if ($p->id != 0) {
 				$this->db->query("UPDATE tr_guru_tes SET id_mapel = '".bersih($p,"mapel")."', 
 								nama_ujian = '".bersih($p,"nama_ujian")."', jumlah_soal = '".bersih($p,"jumlah_soal")."', 
 								waktu = '".bersih($p,"waktu")."', terlambat = '".bersih($p,"terlambat")."', 
-								tgl_mulai = '".bersih($p,"tgl_mulai")."', jenis = '".bersih($p,"acak")."'
+								tgl_mulai = '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', jenis = '".bersih($p,"acak")."'
 								WHERE id = '".bersih($p,"id")."'");
 				$ket = "edit";
 			} else {
@@ -881,8 +883,9 @@ class Adm extends CI_Controller {
 				$token = strtoupper(random_string('alpha', 5));
 
 				$this->db->query("INSERT INTO tr_guru_tes VALUES (null, '".$a['sess_konid']."', '".bersih($p,"mapel")."',
-								'".bersih($p,"nama_ujian")."', '".bersih($p,"jumlah_soal")."', '".bersih($p,"waktu")."', '".bersih($p,"terlambat")."', 
-								'".bersih($p,"acak")."', '', '".bersih($p,"tgl_mulai")."', '$token')");
+								'".bersih($p,"nama_ujian")."', '".bersih($p,"jumlah_soal")."', '".bersih($p,"waktu")."', '".bersih($p,"acak")."', 
+								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".
+								bersih($p,"terlambat")."', '$token')");
 			}
 			
 			$ret_arr['status'] 	= "ok";
