@@ -200,6 +200,7 @@ function m_ujian_e(id) {
 			$("#waktu").val(data.waktu);
 			$("#terlambat").val(data.terlambat);
 			$("#tgl_mulai").val(data.tgl_mulai);
+			$("#wkt_mulai").val(data.wkt_mulai);
 			$("#acak").val(data.jenis);
 			$("#nama_ujian").focus();
 			__ambil_jumlah_soal(data.id_mapel);
