@@ -95,9 +95,15 @@ function bersih($data, $pil) {
 function obj_to_array($obj, $pilih) {
 	$pilihpc	= explode(",", $pilih);
 	$array 		= array(""=>"-");
+
 	foreach ($obj as $o) {
-		$array[$o->$pilihpc[0]] = $o->$pilihpc[1]; 
+		$xx = $pilihpc[0];
+		$x = $o->$xx;
+		$y = $pilihpc[1];
+
+		$array[$x] = $o->$y; 
 	}
+
 	return $array;
 }
 
