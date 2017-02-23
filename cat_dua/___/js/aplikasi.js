@@ -132,8 +132,8 @@ function pagination(indentifier, url, config) {
     }); 
 }
 
-function login() {
-	event.preventDefault();
+function login(e) {
+	e = e || window.event;
 	var data 	= $('#f_login').serialize();
 	$("#konfirmasi").html("<div class='alert alert-info'><i class='icon icon-spinner icon-spin'></i> Checking...</div>")
 	$.ajax({
