@@ -2,7 +2,7 @@
 $uri4 = $this->uri->segment(4);
 ?>
 
-<div class="row col-md-12">
+<div class="row col-md-12 ini_bodi">
   <div class="panel panel-info">
     <div class="panel-heading"><b>Data Soal</b>
       <div class="tombol-kanan">
