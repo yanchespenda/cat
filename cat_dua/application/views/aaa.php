@@ -40,14 +40,16 @@
 
 
 
-      <?php 
-      gen_menu();
-      echo $this->load->view($p); 
-      ?>
+      	<?php gen_menu(); ?>
+  	<?php echo $this->load->view($p); ?>
+   
+   
+   
+   
    </div>
 
    <div class="col-md-12 footer">
-     <a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi')."</a> &copy; <a href='http://nur-akhwan.web.id/' target='_blank'>Nur Akhwan</a> <br> Waktu Server: ".tjs(date('Y-m-d H:i:s'),"s")." - Waktu Database: ".tjs($this->waktu_sql,"s"); ?>. 
+     <a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi')."</a><br> Waktu Server: ".tjs(date('Y-m-d H:i:s'),"s")." - Waktu Database: ".tjs($this->waktu_sql,"s"); ?>. 
    </div>
 
 <!-- insert modal -->
