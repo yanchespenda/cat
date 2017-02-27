@@ -42,7 +42,7 @@
 </div> 
 
 <div class="ctr"> 
-	<a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi')."</a> &copy; <a href='http://nur-akhwan.web.id/' target='_blank'>Nur Akhwan</a>"; ?>
+	<a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi'); ?></a>
 </div>
 
 <script src="<?php echo base_url(); ?>___/js/jquery-1.11.3.min.js"></script> 
