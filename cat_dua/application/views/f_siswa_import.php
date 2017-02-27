@@ -1,4 +1,4 @@
-<div class="row col-md-12">
+<div class="row col-md-12 ini_bodi">
     <div class="panel panel-info">
         <div class="panel-heading">Import Data Siswa
         </div>
