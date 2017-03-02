@@ -728,7 +728,7 @@ class Adm extends CI_Controller {
 		            }
 	                $html .= '<table>
 	                <tr><td>'.$no.'.</td><td colspan="2">'.$d->soal.'<br>'.$tampil_media.'</td></tr>';
-	                for ($j=0; $j<sizeof($jawaban);$j++) {
+	                for ($j=0; $j<($this->config->item('jml_opsi'));$j++) {
 	                  	$opsi = "opsi_".strtolower($jawaban[$j]);
 	                    $pc_pilihan_opsi = explode("#####", $d->$opsi);
 	                    $tampil_media_opsi = (file_exists('./upload/gambar_soal/'.$pc_pilihan_opsi[0]) AND $pc_pilihan_opsi[0] != "") ? '<img src="'.base_url().'upload/gambar_soal/'.$pc_pilihan_opsi[0].'" style="width: 100px; height: 100px; margin-right: 20px">' : '';
