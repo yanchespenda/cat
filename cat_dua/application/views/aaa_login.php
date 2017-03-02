@@ -51,6 +51,6 @@
 	base_url = "<?php echo base_url(); ?>";
 	uri_js = "<?php echo $this->config->item('uri_js'); ?>";
 </script>
-<script src="<?php echo base_url(); ?>___/js/aplikasi.min.js"></script> 
+<script src="<?php echo base_url(); ?>___/js/aplikasi.js"></script> 
 </body>
 </html>
