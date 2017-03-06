@@ -18,14 +18,17 @@
 
             <div class="form-group fgsoal">
               <div class="col-md-2"><label>Teks Soal</label></div>
-              <div class="col-md-2">
-                <input type="file" name="gambar_soal" id="gambar_soal" class="btn btn-info upload"></div>
+              <div class="col-md-3">
+                <input type="file" name="gambar_soal" id="gambar_soal" class="btn btn-info upload">
                 <?php 
                 if (is_file('./upload/gambar_soal/'.$d['file'])) {
-                  echo tampil_media('./upload/gambar_soal/'.$d['file'],"100px");
+                  echo tampil_media('./upload/gambar_soal/'.$d['file'],"100%");
                 }
                 ?>
-              <div class="col-md-8"><textarea class="form-control" id="editornya" style="height: 50px;" name="soal"><?php echo $d['soal']; ?></textarea></div>
+              </div>
+              <div class="col-md-7">
+                <textarea class="form-control" id="editornya" style="height: 50px;" name="soal"><?php echo $d['soal']; ?></textarea>
+              </div>
             </div>
             
             <?php 
@@ -35,15 +38,17 @@
 
             <div class="form-group fgsoal">
               <div class="col-md-2"><label>Jawaban <?php echo $huruf_opsi[$j]; ?></label></div>
-              <div class="col-md-2">
-                <input type="file" name="gj<?php echo $huruf_opsi[$j]; ?>" id="gambar_soal" class="btn btn-success upload">
+              <div class="col-md-3">
+                <input type="file" name="gj<?php echo $huruf_opsi[$j]; ?>" id="gambar_soal" class="btn btn-success upload"><br>
                 <?php 
-                if (is_file('./upload/gambar_soal/'.$data_pc[$idx]['gambar'])) {
-                  echo tampil_media('./upload/gambar_soal/'.$data_pc[$idx]['gambar'],"100%");
+                if (is_file('./upload/gambar_opsi/'.$data_pc[$idx]['gambar'])) {
+                  echo tampil_media('./upload/gambar_opsi/'.$data_pc[$idx]['gambar'],"100%");
                 }
                 ?>
               </div>
-              <div class="col-md-8"><textarea class="form-control" id="editornya_<?php echo $huruf_opsi[$j]; ?>" style="height: 30px" name="opsi_<?php echo $huruf_opsi[$j]; ?>"><?php echo $data_pc[$idx]['opsi']; ?></textarea></div>
+              <div class="col-md-7">
+                <textarea class="form-control" id="editornya_<?php echo $huruf_opsi[$j]; ?>" style="height: 30px" name="opsi_<?php echo $huruf_opsi[$j]; ?>"><?php echo $data_pc[$idx]['opsi']; ?></textarea>
+              </div>
             </div>
 
             <?php } ?>
