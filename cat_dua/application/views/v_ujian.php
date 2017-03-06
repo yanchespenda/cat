@@ -82,6 +82,7 @@
 <script src="<?php echo base_url(); ?>___/js/bootstrap.js"></script>
 <script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.plugin.min.js"></script> 
 <script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdown.min.js"></script> 
+<script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script> 
 
 <script type="text/javascript">
     var base_url = "<?php echo base_url(); ?>";
@@ -97,6 +98,11 @@
     }
     
     $(document).on("ready", function(){
+        $('.gambar').each(function(){
+            var url = $(this).attr("src");
+            $(this).zoom({url: url});
+        });
+            
         hitung();
     	simpan();
         buka(1);
