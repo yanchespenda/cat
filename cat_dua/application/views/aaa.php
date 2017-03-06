@@ -57,7 +57,6 @@
 
 
 <script src="<?php echo base_url(); ?>___/js/jquery-1.11.3.min.js"></script> 
-<script src="<?php echo base_url(); ?>___/js/ajaxFileUpload.js"></script> 
 <script src="<?php echo base_url(); ?>___/js/bootstrap.js"></script>
 
 <?php 
@@ -77,6 +76,7 @@ if ($this->uri->segment(2) == "m_soal" && $this->uri->segment(3) == "edit") {
 
 <script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.plugin.min.js"></script> 
 <script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdown.min.js"></script> 
+<script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script> 
 
 <script type="text/javascript">
 var base_url = "<?php echo base_url(); ?>";
