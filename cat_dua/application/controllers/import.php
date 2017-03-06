@@ -19,6 +19,8 @@ class Import extends CI_Controller {
         $idx_baris_selesai = 100;
 
         $target_file = './upload/temp/';
+        $buat_folder_temp = !is_dir($target_file) ? @mkdir("./upload/temp/") : false;
+        
         move_uploaded_file($_FILES["import_excel"]["tmp_name"], $target_file.$_FILES['import_excel']['name']);
 
         $file   = explode('.',$_FILES['import_excel']['name']);
@@ -63,6 +65,8 @@ class Import extends CI_Controller {
         $idx_baris_selesai = 100;
 
         $target_file = './upload/temp/';
+        $buat_folder_temp = !is_dir($target_file) ? @mkdir("./upload/temp/") : false;
+
         move_uploaded_file($_FILES["import_excel"]["tmp_name"], $target_file.$_FILES['import_excel']['name']);
 
         $file   = explode('.',$_FILES['import_excel']['name']);
@@ -108,6 +112,8 @@ class Import extends CI_Controller {
         $idx_baris_selesai = 106;
 
         $target_file = './upload/temp/';
+        $buat_folder_temp = !is_dir($target_file) ? @mkdir("./upload/temp/") : false;
+        
         move_uploaded_file($_FILES["import_excel"]["tmp_name"], $target_file.$_FILES['import_excel']['name']);
 
         $file   = explode('.',$_FILES['import_excel']['name']);
