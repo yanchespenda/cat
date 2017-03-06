@@ -504,11 +504,42 @@ class Adm extends CI_Controller {
 			//etok2nya config
 			$folder_gb_soal = "./upload/gambar_soal/";
 			$folder_gb_opsi = "./upload/gambar_opsi/";
+
+			$buat_folder_gb_soal = !is_dir($folder_gb_soal) ? @mkdir("./upload/gambar_soal/") : false;
+			$buat_folder_gb_opsi = !is_dir($folder_gb_opsi) ? @mkdir("./upload/gambar_opsi/") : false;
+
 			$allowed_type 	= array("image/jpeg", "image/png", "image/gif", 
 			"audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav",
 			"video/mp4", "application/octet-stream");
+
 			$gagal 		= array();
 			$nama_file 	= array();
+			$tipe_file 	= array();
+
+			//get mode
+			$__mode = $p['mode'];
+			$__id_soal = 0;
+			//ambil data post sementara
+			$pdata = array(
+				"id_guru"=>$p['id_guru'],
+				"id_mapel"=>$p['id_mapel'],
+				"bobot"=>$p['bobot'],
+				"soal"=>$p['soal'],
+				"jawaban"=>$p['jawaban'],
+			);
+
+			if ($__mode == "edit") {
+				$this->db->where("id", $p['id']);
+				$this->db->update("m_soal", $pdata);
+				$__id_soal = $p['id'];
+			} else {
+				$this->db->insert("m_soal", $pdata);
+				$get_id_akhir = $this->db->query("SELECT MAX(id) maks FROM m_soal LIMIT 1")->row_array();
+				$__id_soal = $get_id_akhir['maks'];
+			}
+
+			//mulai dari sini id soal diambil dari variabel $__id
+
 			//lakukan perulangan sejumlah file upload yang terdeteksi
 			foreach ($_FILES as $k => $v) {
 				//var file upload
@@ -526,121 +557,63 @@ class Adm extends CI_Controller {
 				//exit;
 				//echo var_dump($file_error == 0 || in_array($file_type, $allowed_type) || $file_name != "");
 				//exit;
-				if ($file_error == 0 && in_array($file_type, $allowed_type) && $file_name != "") {
-					
-					//pecah untuk mendapatkan ekstensi
-					$pc_file_name	= !empty($file_name) ? explode(".", $file_name) : ".";
-					$file_name_0	= str_replace(" ", "", $pc_file_name[0]);
-					$file_name_0	= str_replace(".", "_", $pc_file_name[0]);
-					$file_name_1	= $pc_file_name[1];
-					
-					$file_name 		= str_replace(" ", "", $file_name);
-					
-					//cek jika file sudah ada
-					if (file_exists($folder_gb_soal.$file_name)) {
-						for ($i = 1; $i <= 100; $i++) {
-							if (!file_exists($folder_gb_soal.$file_name_0.$i.".".$file_name_1)) {
-								$file_name = $file_name_0.$i.".".$file_name_1;
-								break;
-							}
-						}
+				if ($file_error != 0) {
+					$gagal[$k] = $kode_file_error[$file_error];
+					$nama_file[$k]	= "";
+					$tipe_file[$k]	= "";
+				} else if (!in_array($file_type, $allowed_type)) {
+					$gagal[$k] = "Tipe file ini tidak diperbolehkan..";
+					$nama_file[$k]	= "";
+					$tipe_file[$k]	= "";
+				} else if ($file_name == "") {
+					$gagal[$k] = "Tidak ada file yang diupload";
+					$nama_file[$k]	= "";
+					$tipe_file[$k]	= "";					
+				} else {
+					$ekstensi = explode(".", $file_name);
+
+					$file_name = $k."_".$__id_soal.".".$ekstensi[1];
+
+					if ($k == "gambar_soal") {
 						@move_uploaded_file($file_tmp, $folder_gb_soal.$file_name);
 					} else {
-						@move_uploaded_file($file_tmp, $folder_gb_soal.$file_name);
+						@move_uploaded_file($file_tmp, $folder_gb_opsi.$file_name);
 					}
+
 					$gagal[$k]	 	= $kode_file_error[$file_error]; //kode kegagalan upload file
 					$nama_file[$k]	= $file_name; //ambil nama file
 					$tipe_file[$k]	= $file_type; //ambil tipe file
-				} else {
-					if (!in_array($file_type, $allowed_type)) {
-						$gagal[$k] = "Type file tidak diperbolehkan ATAU Tidak ada file yang diupload..!";
-					} else {					
-						$gagal[$k] = $kode_file_error[$file_error];
-					}
-					$nama_file[$k]	= "";
-					$tipe_file[$k]	= "";
-				}				
-			}
-			//echo var_dump($gagal);
-			//echo var_dump($nama_file);
-			//echo var_dump($tipe_file);
-			//exit;
-			$id = $p['id'];
-			$id_guru = $pembuat_soal;
-			$id_mapel = $p['id_mapel'];
-			$gambar = addslashes($nama_file['gambar_soal']);
-			$tipe_file = $tipe_file['gambar_soal'];
-			$soal = addslashes($p['soal']);
-			$opsi_a = addslashes($nama_file['gja'])."#####".addslashes($p['opsi_a']);
-			$opsi_b = addslashes($nama_file['gjb'])."#####".addslashes($p['opsi_b']);
-			$opsi_c = addslashes($nama_file['gjc'])."#####".addslashes($p['opsi_c']);
-			$opsi_d = addslashes($nama_file['gjd'])."#####".addslashes($p['opsi_d']);
-			$opsi_e = addslashes($nama_file['gje'])."#####".addslashes($p['opsi_e']);
-			$jawaban = $p['jawaban'];
-			$bobot = $p['bobot'];
-			//jika edit, maka agar tidak tampil tanda ##### sebagai pemisah antara file gambar/audio dengan pilihan opsi
-			$data_awal = $this->db->query("SELECT * FROM m_soal WHERE id = '$id'")->row_array();
-
-			if (empty($data_awal)) {
-				$data_awal['opsi_a'] = "#####";
-				$data_awal['opsi_b'] = "#####";
-				$data_awal['opsi_c'] = "#####";
-				$data_awal['opsi_d'] = "#####";
-				$data_awal['opsi_e'] = "#####";
-				$data_awal['tipe_file'] = "";
-				$data_awal['file'] = "";
+				}
 			}
 
-			$data_a = explode("#####", $data_awal['opsi_a']);
-			$data_b = explode("#####", $data_awal['opsi_b']);
-			$data_c = explode("#####", $data_awal['opsi_c']);
-			$data_d = explode("#####", $data_awal['opsi_d']);
-			$data_e = explode("#####", $data_awal['opsi_e']);
 
-			if ($gambar == "") {
-				$gambar = addslashes($data_awal['file']);
-				$tipe_file = $data_awal['tipe_file'];
-			} else {
-				$gambar = $gambar;
-				@unlink('./upload/gambar_soal/'.$data_awal['file']);
-			} 
-			if ($nama_file['gja'] == "") {
-				$opsi_a = $data_a[0]."#####".addslashes($p['opsi_a']);
-			} else {
-				$opsi_a = $nama_file['gja']."#####".addslashes($p['opsi_a']);
-				@unlink('./upload/gambar_soal/'.$data_a[0]);
-			} 
-			if ($nama_file['gjb'] == "") {
-				$opsi_b = $data_b[0]."#####".addslashes($p['opsi_b']);
-			} else {
-				$opsi_b = $nama_file['gjb']."#####".addslashes($p['opsi_b']);
-				@unlink('./upload/gambar_soal/'.$data_b[0]);
+			//ambil data awal
+			$get_opsi_awal = $this->db->query("SELECT opsi_a, opsi_b, opsi_c, opsi_d, opsi_e FROM m_soal WHERE id = '".$__id_soal."'")->row_array();
+
+			$data_simpan = array();
+
+			if (!empty($nama_file['gambar_soal'])) {
+				$data_simpan = array(
+								"file"=>$nama_file['gambar_soal'],
+								"tipe_file"=>$tipe_file['gambar_soal'],
+								);
 			}
-			if ($nama_file['gjc'] == "") {
-				$opsi_c = $data_c[0]."#####".addslashes($p['opsi_c']);
-			} else {
-				$opsi_c = $nama_file['gjc']."#####".addslashes($p['opsi_c']);
-				@unlink('./upload/gambar_soal/'.$data_c[0]);
-			} 
-			if ($nama_file['gjd'] == "") {
-				$opsi_d = $data_d[0]."#####".addslashes($p['opsi_d']);
-			} else {
-				$opsi_d = $nama_file['gjd']."#####".addslashes($p['opsi_d']);
-				@unlink('./upload/gambar_soal/'.$data_d[0]);
-			} 
-			if ($nama_file['gje'] == "") {
-				$opsi_e = $data_e[0]."#####".addslashes($p['opsi_e']);
-			} else {
-				$opsi_e = $nama_file['gje']."#####".addslashes($p['opsi_e']);
-				@unlink('./upload/gambar_soal/'.$data_e[0]);
-			} 
-			if ($p['mode'] == "add") {	
-				$strq = "INSERT INTO m_soal VALUES (null, '$id_guru', '$id_mapel', '$bobot', '$gambar', '$tipe_file', '$soal', '$opsi_a', '$opsi_b', '$opsi_c', '$opsi_d', '$opsi_e', '$jawaban', NOW(),'','')";
-				
-			} else if ($p['mode'] == "edit") {
-				$strq = "UPDATE m_soal SET id_guru = '$id_guru', id_mapel = '$id_mapel', bobot = '$bobot', file = '$gambar', tipe_file = '$tipe_file', soal = '$soal', opsi_a = '$opsi_a', opsi_b = '$opsi_b', opsi_c = '$opsi_c', opsi_d = '$opsi_d', opsi_e = '$opsi_e', jawaban = '$jawaban' WHERE id = '$id'";
+
+			for ($t = 0; $t < $a['jml_opsi']; $t++) {
+				$idx 	= "opsi_".$a['huruf_opsi'][$t];
+				$idx2 	= "gj".$a['huruf_opsi'][$t];
+
+
+				//jika file kosong
+				$pc_opsi_awal = explode("#####", $get_opsi_awal[$idx]);
+				$nama_file_opsi = empty($nama_file[$idx2]) ? $pc_opsi_awal[0] : $nama_file[$idx2];
+
+				$data_simpan[$idx] = $nama_file_opsi."#####".$p[$idx];
 			}
-			$this->db->query($strq);
+
+			$this->db->where("id", $__id_soal);
+			$this->db->update("m_soal", $data_simpan);
+
 			$teks_gagal = "";
 			foreach ($gagal as $k => $v) {
 				$arr_nama_file_upload = array("gambar_soal"=>"File Soal ", "gja"=>"File opsi A ", "gjb"=>"File opsi B ", "gjc"=>"File opsi C ", "gjd"=>"File opsi D ", "gje"=>"File opsi E ");
@@ -663,19 +636,19 @@ class Adm extends CI_Controller {
 
 			}
 
-			$opsi_a = explode("#####", $a['d']['opsi_a']);
-			$opsi_b = explode("#####", $a['d']['opsi_b']);
-			$opsi_c = explode("#####", $a['d']['opsi_c']);
-			$opsi_d = explode("#####", $a['d']['opsi_d']);
-			$opsi_e = explode("#####", $a['d']['opsi_e']);
+			$data = array();
 
-			$data = array(
-						"a"=>array("opsi"=>$opsi_a[1],"gambar"=>$opsi_a[0]),
-						"b"=>array("opsi"=>$opsi_b[1],"gambar"=>$opsi_b[0]),
-						"c"=>array("opsi"=>$opsi_c[1],"gambar"=>$opsi_c[0]),
-						"d"=>array("opsi"=>$opsi_d[1],"gambar"=>$opsi_d[0]),
-						"e"=>array("opsi"=>$opsi_e[1],"gambar"=>$opsi_e[0]),
-						);
+			for ($e = 0; $e < $a['jml_opsi']; $e++) {
+				$iidata = array();
+				$idx = "opsi_".$a['huruf_opsi'][$e];
+				$idx2 = $a['huruf_opsi'][$e];
+
+				$pc_opsi_edit = explode("#####", $a['d'][$idx]);
+				$iidata['opsi'] = $pc_opsi_edit[1];
+				$iidata['gambar'] = $pc_opsi_edit[0];
+				$data[$idx2] = $iidata;
+			}
+
 
 			$a['data_pc'] = $data;
 			$a['p'] = "f_soal";
