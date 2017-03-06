@@ -144,7 +144,7 @@ function tampil_media($file,$width="320px",$height="240px") {
 
 		if (in_array($eks, $eks_image)) {
 			if (is_file("./".$file)) {
-				$ret .= '<p><img src="'.base_url().$file.'" style="width: '.$width.'; height: '.$height.'; display: inline; float: left"></p>';
+				$ret .= '<div class="gambar"><img src="'.base_url().$file.'" style="width: '.$width.'; height: '.$height.'; display: inline; float: left"></div>';
 			} else {
 				$ret .= '';
 			}
@@ -220,3 +220,4 @@ function gen_menu() {
 
 	}
 }
+		
