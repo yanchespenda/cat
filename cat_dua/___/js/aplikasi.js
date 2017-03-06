@@ -1,5 +1,10 @@
 $(document).ready(function() {
 	
+	$('.gambar').each(function(){
+		var url = $(this).attr("src");
+		$(this).zoom({url: url});
+	});
+
 	var url = get_url(parseInt(uri_js));
 	var url2 = get_url((parseInt(uri_js)+1));
 	var url3 = get_url((parseInt(uri_js)+2));
