@@ -1347,7 +1347,7 @@ class Adm extends CI_Controller {
 				$no = 1;
 				if (!empty($soal_urut_ok)) {
 				    foreach ($soal_urut_ok as $d) { 
-				        $tampil_media = tampil_media("./upload/gambar_soal/".$d->file);
+				        $tampil_media = tampil_media("./upload/gambar_soal/".$d->file, 'auto','auto');
 
 				        $html .= '<input type="hidden" name="id_soal_'.$no.'" value="'.$d->id.'">';
 				        $html .= '<div class="step" id="widget_'.$no.'">';
@@ -1361,7 +1361,7 @@ class Adm extends CI_Controller {
 
 				            $pc_pilihan_opsi = explode("#####", $d->$opsi);
 
-				            $tampil_media_opsi = (is_file('./upload/gambar_soal/'.$pc_pilihan_opsi[0]) AND $pc_pilihan_opsi[0] != "") ? tampil_media('./upload/gambar_soal/'.$pc_pilihan_opsi[0]) : '';
+				            $tampil_media_opsi = (is_file('./upload/gambar_soal/'.$pc_pilihan_opsi[0]) || $pc_pilihan_opsi[0] != "") ? tampil_media('./upload/gambar_opsi/'.$pc_pilihan_opsi[0],'auto','auto') : '';
 
 				            $html .= '<div class="funkyradio-success">
 				                <input type="radio" id="opsi_'.strtoupper($this->opsi[$j]).'_'.$d->id.'" name="opsi_'.$no.'" value="'.strtoupper($this->opsi[$j]).'" '.$checked.'> <label for="opsi_'.strtoupper($this->opsi[$j]).'_'.$d->id.'"><div class="huruf_opsi">'.$this->opsi[$j].'</div> <p>'.$pc_pilihan_opsi[1].'</p><p>'.$tampil_media_opsi.'</p></label></div>';
