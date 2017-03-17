@@ -1,6 +1,13 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+//dynamic base_url
+$root = "http://".$_SERVER['HTTP_HOST'];
+$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$pc_root = explode("/", $root);
+$uri_js = count($pc_root) - 2;
+
+
 $config['jml_opsi']			= 4;			//isi dengan pilihan opsi jawaban, HARUS <= 5
-$config['uri_js']			= 4;			//klo datatables nggak jalan, bisa diubah angkanya > 3
+$config['uri_js']			= $uri_js;		
 $config['editor_style']		= "replace";	//pilihannya "inline" atau "replace";
 $config['nama_aplikasi']	= "CAT - Computer Assisted Test";
 $config['versi']			= "2.0";
@@ -40,11 +47,9 @@ $config['tgl']				= "27012017";
 
 
 
-
-//dynamic base_url
-$root = "http://".$_SERVER['HTTP_HOST'];
-$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 $config['base_url']			= $root;
+
+
 $config['index_page'] 		= '';
 $config['uri_protocol']		= 'AUTO';
 $config['url_suffix'] = '';
