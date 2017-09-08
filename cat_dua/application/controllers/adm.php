@@ -621,7 +621,7 @@ class Adm extends CI_Controller {
 			}
 			$this->session->set_flashdata('k', '<div class="alert alert-info">'.$teks_gagal.'</div>');
 			
-			redirect('adm/m_soal/pilih_mapel/'.$id_mapel);
+			redirect('adm/m_soal/pilih_mapel/'.$p['id_mapel']);
 		} else if ($uri3 == "edit") {
 			$a['opsij'] = array(""=>"Jawaban","A"=>"A","B"=>"B","C"=>"C","D"=>"D","E"=>"E");
 			
