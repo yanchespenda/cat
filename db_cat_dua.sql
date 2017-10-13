@@ -212,7 +212,6 @@ CREATE TRIGGER `hapus_mapel` AFTER DELETE ON `m_mapel` FOR EACH ROW BEGIN
 DELETE FROM m_soal WHERE m_soal.id_mapel = OLD.id;
 DELETE FROM tr_guru_mapel WHERE tr_guru_mapel.id_mapel = OLD.id;
 DELETE FROM tr_guru_tes WHERE tr_guru_tes.id_mapel = OLD.id;
-DELETE FROM tr_siswa_mapel WHERE tr_siswa_mapel.id_mapel = OLD.id;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
