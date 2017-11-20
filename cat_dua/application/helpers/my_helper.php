@@ -220,4 +220,9 @@ function gen_menu() {
 
 	}
 }
-		
+
+function cek_hakakses($arr_yg_boleh_akses, $userid) {
+	if (!in_array($userid, $arr_yg_boleh_akses)) {
+		redirect('adm');
+	}
+}		
