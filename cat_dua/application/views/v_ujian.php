@@ -229,6 +229,7 @@
             $(".back").show();
         }
 
+        simpan_sementara();
         simpan();
     }
     
@@ -273,6 +274,7 @@
             $(".back").show();
         }
 
+        simpan_sementara();
         simpan();
     }
 
