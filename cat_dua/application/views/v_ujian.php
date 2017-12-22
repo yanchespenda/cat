@@ -54,7 +54,11 @@
 
                 <div class="panel-footer">
                     <a class="action back btn btn-info btn-lg" rel="0" onclick="return back();"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+
+                    <a class="ragu_ragu btn btn-danger btn-lg" rel="1" onclick="return tidak_jawab();"><i class="glyphicon glyphicon-stop"></i> Ragu-ragu</a>
+
                     <a class="action next btn btn-info btn-lg" rel="2" onclick="return next();"><i class="glyphicon glyphicon-chevron-right"></i> Next</a>
+                    
                     <a class="action submit btn btn-danger btn-lg pull-right" onclick="return simpan_akhir();"><i class="glyphicon glyphicon-stop"></i> Selesai Ujian</a>
                     <input type="hidden" name="jml_soal" value="<?php echo $no; ?>">
                 </div>
@@ -119,6 +123,57 @@
       
     widget      = $(".step");
     total_widget = widget.length;
+    
+    simpan_sementara = function() {
+        var f_asal  = $("#_form");
+        var form  = getFormData(f_asal);
+        //form = JSON.stringify(form);
+        var jml_soal = form.jml_soal;
+        jml_soal = parseInt(jml_soal);
+
+        var hasil_jawaban = "";
+            
+
+        for (var i = 1; i < jml_soal; i++) {
+            var idx = 'opsi_'+i;
+            var jawab = form[idx];
+
+            if (jawab != undefined) {
+                hasil_jawaban += '<a class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". "+jawab+"</a>";
+            } else {
+                hasil_jawaban += '<a class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". -</a>";
+            }
+        }
+
+        $("#tampil_jawaban").html(hasil_jawaban);
+    }
+
+    simpan = function() {
+        var f_asal  = $("#_form");
+        var form  = getFormData(f_asal);
+
+        $.ajax({    
+            type: "POST",
+            url: base_url+"adm/ikut_ujian/simpan_satu/"+id_tes,
+            data: JSON.stringify(form),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function(response) {
+            var hasil_jawaban = "";
+            var panjang       = response.data.length;
+
+            for (var i = 0; i < panjang; i++) {
+                if (response.data[i] != "") {
+                    hasil_jawaban += '<a class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". "+response.data[i]+"</a>";
+                } else {
+                    hasil_jawaban += '<a class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". -</a>";
+                }
+            }
+
+            $("#tampil_jawaban").html(hasil_jawaban);
+        });
+        return false;
+    }
     
     hitung = function() {
         <?php 
@@ -221,6 +276,14 @@
         simpan();
     }
 
+
+    tidak_jawab = function() {
+        var id_step = $(".ragu_ragu").attr('rel');
+        $("#widget_"+id_step+" input[type=radio]").attr("checked", false);
+        simpan_sementara();
+        simpan();
+    }
+    
     buka = function(id_widget) {
         $(".next").attr('rel', (id_widget+1));
         $(".back").attr('rel', (id_widget-1));
@@ -229,33 +292,6 @@
         
         $(".step").hide();
         $("#widget_"+id_widget).show();
-    }
-
-    simpan = function() {
-        var f_asal  = $("#_form");
-        var form  = getFormData(f_asal);
-
-        $.ajax({    
-            type: "POST",
-            url: base_url+"adm/ikut_ujian/simpan_satu/"+id_tes,
-            data: JSON.stringify(form),
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
-        }).done(function(response) {
-          	var hasil_jawaban = "";
-            var panjang       = response.data.length;
-
-            for (var i = 0; i < panjang; i++) {
-                if (response.data[i] != "") {
-                    hasil_jawaban += '<a class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". "+response.data[i]+"</a>";
-                } else {
-                    hasil_jawaban += '<a class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". -</a>";
-                }
-            }
-
-            $("#tampil_jawaban").html(hasil_jawaban);
-        });
-        return false;
     }
 
     simpan_akhir = function() {
