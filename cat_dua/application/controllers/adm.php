@@ -1370,7 +1370,7 @@ class Adm extends CI_Controller {
 
 				            $tampil_media_opsi = (is_file('./upload/gambar_soal/'.$pc_pilihan_opsi[0]) || $pc_pilihan_opsi[0] != "") ? tampil_media('./upload/gambar_opsi/'.$pc_pilihan_opsi[0],'auto','auto') : '';
 
-				            $html .= '<div class="funkyradio-success">
+				            $html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
 				                <input type="radio" id="opsi_'.strtoupper($this->opsi[$j]).'_'.$d->id.'" name="opsi_'.$no.'" value="'.strtoupper($this->opsi[$j]).'" '.$checked.'> <label for="opsi_'.strtoupper($this->opsi[$j]).'_'.$d->id.'"><div class="huruf_opsi">'.$this->opsi[$j].'</div> <p>'.$pc_pilihan_opsi[1].'</p><p>'.$tampil_media_opsi.'</p></label></div>';
 				        }
 				        $html .= '</div></div>';
