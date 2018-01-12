@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `tr_guru_tes` (
   `jenis` enum('acak','set') NOT NULL,
   `detil_jenis` varchar(500) NOT NULL,
   `tgl_mulai` datetime NOT NULL,
-  `terlambat` int(3) NOT NULL,
+  `terlambat` datetime NOT NULL,
   `token` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_guru` (`id_guru`),
