@@ -30,6 +30,7 @@ class Adm extends CI_Controller {
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
 		
 		$a['p']			= "v_main";
+		$a['menu']		= gen_menu();
 		
 		$this->load->view('aaa', $a);
 	}
@@ -43,10 +44,14 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
+
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
 		$uri4 = $this->uri->segment(4);
+		
 		//var post from json
 		$p = json_decode(file_get_contents('php://input'));
 		//return as json
@@ -163,14 +168,14 @@ class Adm extends CI_Controller {
 
 	        foreach ($q_datanya as $d) {
 	            $data_ok = array();
-	            $data_ok[0] = $no++;
-	            $data_ok[1] = $d['nama'];
-	            $data_ok[2] = $d['nim'];
-	            $data_ok[3] = $d['jurusan'];
+	            $data_ok[] = $no++;
+	            $data_ok[] = $d['nama'];
+	            $data_ok[] = $d['nim'];
+	            $data_ok[] = $d['jurusan'];
 
 
 
-	            $data_ok[4] = '<div class="btn-group">
+	            $data_ok[] = '<div class="btn-group">
                           <a href="#" onclick="return m_siswa_e('.$d['id'].');" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-pencil" style="margin-left: 0px; color: #fff"></i> &nbsp;&nbsp;Edit</a>
                           <a href="#" onclick="return m_siswa_h('.$d['id'].');" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove" style="margin-left: 0px; color: #fff"></i> &nbsp;&nbsp;Hapus</a>
                          ';
@@ -207,6 +212,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -372,6 +378,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -453,6 +460,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 
 		$a['huruf_opsi'] = array("a","b","c","d","e");
 		$a['jml_opsi'] = $this->config->item('jml_opsi');
@@ -794,6 +802,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -818,13 +827,16 @@ class Adm extends CI_Controller {
 				$pc_waktu = explode(" ", $a->tgl_mulai);
 				$pc_tgl = explode("-", $pc_waktu[0]);
 
+				$pc_terlambat = explode(" ", $a->terlambat);
+
 				$are['id'] = $a->id;
 				$are['id_guru'] = $a->id_guru;
 				$are['id_mapel'] = $a->id_mapel;
 				$are['nama_ujian'] = $a->nama_ujian;
 				$are['jumlah_soal'] = $a->jumlah_soal;
 				$are['waktu'] = $a->waktu;
-				$are['terlambat'] = $a->terlambat;
+				$are['terlambat'] = $pc_terlambat[0];
+				$are['terlambat2'] = substr($pc_terlambat[1],0,5);
 				$are['jenis'] = $a->jenis;
 				$are['detil_jenis'] = $a->detil_jenis;
 				$are['tgl_mulai'] = $pc_waktu[0];
@@ -838,6 +850,7 @@ class Adm extends CI_Controller {
 				$are['jumlah_soal'] = "";
 				$are['waktu'] = "";
 				$are['terlambat'] = "";
+				$are['terlambat2'] = "";
 				$are['jenis'] = "";
 				$are['detil_jenis'] = "";
 				$are['tgl_mulai'] = "";
@@ -853,7 +866,8 @@ class Adm extends CI_Controller {
 			if ($p->id != 0) {
 				$this->db->query("UPDATE tr_guru_tes SET id_mapel = '".bersih($p,"mapel")."', 
 								nama_ujian = '".bersih($p,"nama_ujian")."', jumlah_soal = '".bersih($p,"jumlah_soal")."', 
-								waktu = '".bersih($p,"waktu")."', terlambat = '".bersih($p,"terlambat")."', 
+								waktu = '".bersih($p,"waktu")."', 
+								terlambat = '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', 
 								tgl_mulai = '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', jenis = '".bersih($p,"acak")."'
 								WHERE id = '".bersih($p,"id")."'");
 				$ket = "edit";
@@ -863,7 +877,7 @@ class Adm extends CI_Controller {
 
 				$this->db->query("INSERT INTO tr_guru_tes VALUES (null, '".$a['sess_konid']."', '".bersih($p,"mapel")."',
 								'".bersih($p,"nama_ujian")."', '".bersih($p,"jumlah_soal")."', '".bersih($p,"waktu")."', '".bersih($p,"acak")."', 
-								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".
+								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', '".
 								bersih($p,"terlambat")."', '$token')");
 			}
 			
@@ -956,6 +970,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1086,6 +1101,7 @@ class Adm extends CI_Controller {
 	public function hasil_ujian_cetak() {
 		$this->cek_aktif();
 		
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1114,6 +1130,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1146,6 +1163,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1253,17 +1271,19 @@ class Adm extends CI_Controller {
 										INNER JOIN m_guru b ON a.id_guru = b.id
 										INNER JOIN m_mapel c ON a.id_mapel = c.id 
 										WHERE a.id = '$uri4'")->row_array();
-			$a['dp'] = $this->db->query("SELEcT * FROM m_siswa WHERE id = '".$a['sess_konid']."'")->row_array();
+
+			$a['dp'] = $this->db->query("SELECT * FROM m_siswa WHERE id = '".$a['sess_konid']."'")->row_array();
+			//$q_status = $this->db->query();
 
 			if (!empty($a['du']) || !empty($a['dp'])) {
 				$tgl_selesai = $a['du']['tgl_mulai'];
-			    $tgl_selesai = strtotime($tgl_selesai);
-			    $tgl_baru = date('F j, Y H:i:s', $tgl_selesai);
+			    //$tgl_selesai2 = strtotime($tgl_selesai);
+			    //$tgl_baru = date('F j, Y H:i:s', $tgl_selesai);
 
-			    $tgl_terlambat = strtotime("+".$a['du']['terlambat']." minutes", $tgl_selesai);	
-				$tgl_terlambat_baru = date('F j, Y H:i:s', $tgl_terlambat);
+			    //$tgl_terlambat = strtotime("+".$a['du']['terlambat']." minutes", $tgl_selesai2);	
+				$tgl_terlambat_baru = $a['du']['terlambat'];
 
-				$a['tgl_mulai'] = $tgl_baru;
+				$a['tgl_mulai'] = $tgl_selesai;
 				$a['terlambat'] = $tgl_terlambat_baru;
 
 				$a['p']	= "m_token";
@@ -1407,6 +1427,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1448,6 +1469,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
+		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
