@@ -26,6 +26,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                <ul class="nav navbar-nav navbar-right">
+                  <?php echo $menu['menu_atas']; ?>
                   <li class="dropdown">
                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $this->session->userdata('admin_nama')." (".$this->session->userdata('admin_user').")"; ?> <span class="caret"></span></a>
                      <ul class="dropdown-menu" role="menu">
@@ -37,14 +38,9 @@
             </div>
          </div>
       </nav>
-
-
-
-      	<?php gen_menu(); ?>
-  	<?php echo $this->load->view($p); ?>
-   
-   
-   
+      <?php echo $menu['menu_bawah']; ?>
+      
+      <?php echo $this->load->view($p); ?>
    
    </div>
 
@@ -73,10 +69,9 @@ if ($this->uri->segment(2) == "m_soal" && $this->uri->segment(3) == "edit") {
 <script src="<?php echo base_url(); ?>___/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url(); ?>___/plugin/datatables/dataTables.bootstrap.min.js"></script>
 
-
-<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.plugin.min.js"></script> 
-<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdown.min.js"></script> 
 <script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script> 
+<script src="http://infosa-media.net/cd2/jquery.countdownTimer.js"></script> 
+
 
 <script type="text/javascript">
 var base_url = "<?php echo base_url(); ?>";
