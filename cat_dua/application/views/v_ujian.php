@@ -84,9 +84,8 @@
 
 <script src="<?php echo base_url(); ?>___/js/jquery-1.11.3.min.js"></script> 
 <script src="<?php echo base_url(); ?>___/js/bootstrap.js"></script>
-<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.plugin.min.js"></script> 
-<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdown.min.js"></script> 
-<script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script> 
+<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdownTimer.js"></script> 
+<script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script>
 
 <script type="text/javascript">
     var base_url = "<?php echo base_url(); ?>";
@@ -176,24 +175,15 @@
     }
     
     hitung = function() {
-        <?php 
-        $tgl_selesai = $jam_selesai;
-        $tgl_selesai = strtotime($tgl_selesai);
-        $tgl_baru = date('F j, Y H:i:s', $tgl_selesai);
-        ?>
+        var tgl_mulai = '<?php echo date('Y-m-d H:i:s'); ?>';
+        var tgl_selesai = '<?php echo $jam_selesai; ?>';
 
-        var waktu_selesai = new Date('<?php echo $tgl_baru; ?>');
-
-        $('div#clock').countdown(
-            {   
-                until: waktu_selesai, 
-                serverSync: dari_server,
-                alwaysExpire: true, 
-                format: 'HMS', 
-                compact: true, 
-                onExpiry: selesai
-            }
-        );
+        $("div#clock").countdowntimer({
+            startDate : tgl_mulai,
+            dateAndTime : tgl_selesai,
+            size : "lg",
+            timeUp : selesai,
+        });
     }
 
     selesai = function() {
