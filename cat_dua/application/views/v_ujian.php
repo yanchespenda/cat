@@ -55,9 +55,9 @@
                 <div class="panel-footer">
                     <a class="action back btn btn-info btn-lg" rel="0" onclick="return back();"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
 
-                    <a class="ragu_ragu btn btn-danger btn-lg" rel="1" onclick="return tidak_jawab();"><i class="glyphicon glyphicon-stop"></i> Ragu-ragu</a>
-
                     <a class="action next btn btn-info btn-lg" rel="2" onclick="return next();"><i class="glyphicon glyphicon-chevron-right"></i> Next</a>
+
+                    <a class="ragu_ragu btn btn-danger btn-lg" rel="1" onclick="return tidak_jawab();"><i class="glyphicon glyphicon-stop"></i> Ragu-ragu</a>
                     
                     <a class="action submit btn btn-danger btn-lg pull-right" onclick="return simpan_akhir();"><i class="glyphicon glyphicon-stop"></i> Selesai Ujian</a>
                     <input type="hidden" name="jml_soal" value="<?php echo $no; ?>">
@@ -68,7 +68,7 @@
 
     <div class="col-md-3">
         <div class="panel panel-info">
-            <div class="panel-heading">Navigasi Soal</div>
+            <div class="panel-heading" id="nav_soal">Navigasi Soal</div>
             <div class="panel-body">
                 <div id="tampil_jawaban"></div>
             </div>
@@ -135,16 +135,22 @@
 
         for (var i = 1; i < jml_soal; i++) {
             var idx = 'opsi_'+i;
+            var idx2 = 'rg_'+i;
             var jawab = form[idx];
+            var ragu = form[idx2];
 
             if (jawab != undefined) {
-                hasil_jawaban += '<a class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". "+jawab+"</a>";
+                if (ragu == "Y") {
+                    hasil_jawaban += '<a id="btn_soal_'+(i)+'" class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". "+jawab+"</a>";
+                } else {
+                    hasil_jawaban += '<a id="btn_soal_'+(i)+'" class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". "+jawab+"</a>";
+                }
             } else {
-                hasil_jawaban += '<a class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". -</a>";
+                hasil_jawaban += '<a id="btn_soal_'+(i)+'" class="btn btn-default btn_soal btn-sm" onclick="return buka('+(i)+');">'+(i)+". -</a>";
             }
         }
 
-        $("#tampil_jawaban").html(hasil_jawaban);
+        $("#tampil_jawaban").html('<div id="yes"></div>'+hasil_jawaban);
     }
 
     simpan = function() {
@@ -162,14 +168,21 @@
             var panjang       = response.data.length;
 
             for (var i = 0; i < panjang; i++) {
-                if (response.data[i] != "") {
-                    hasil_jawaban += '<a class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". "+response.data[i]+"</a>";
+                if (response.data[i] != "_N") {
+                    var getjwb = response.data[i];
+                    var pc_getjwb = getjwb.split('_');
+
+                    if (pc_getjwb[1] == "Y") {
+                        hasil_jawaban += '<a id="btn_soal_'+(i+1)+'" class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". "+pc_getjwb[0]+"</a>";
+                    } else {
+                        hasil_jawaban += '<a id="btn_soal_'+(i+1)+'" class="btn btn-success btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". "+pc_getjwb[0]+"</a>";
+                    }
                 } else {
-                    hasil_jawaban += '<a class="btn btn-warning btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". -</a>";
+                    hasil_jawaban += '<a id="btn_soal_'+(i+1)+'" class="btn btn-default btn_soal btn-sm" onclick="return buka('+(i+1)+');">'+(i+1)+". -</a>";
                 }
             }
 
-            $("#tampil_jawaban").html(hasil_jawaban);
+            $("#tampil_jawaban").html('<div id="yes"></div>'+hasil_jawaban);
         });
         return false;
     }
@@ -187,7 +200,6 @@
     }
 
     selesai = function() {
-        alert('Waktu telah selesai....!')
         var f_asal  = $("#_form");
         var form  = getFormData(f_asal);
         simpan_akhir(id_tes);
@@ -205,6 +217,7 @@
 
         $(".next").attr('rel', (berikutnya+1));
         $(".back").attr('rel', (berikutnya-1));
+        $(".ragu_ragu").attr('rel', (berikutnya));
         
         var sudah_akhir = berikutnya == total_widget ? 1 : 0;
 
@@ -222,21 +235,6 @@
         simpan_sementara();
         simpan();
     }
-    
-    dari_server = function() { 
-        var time = null; 
-        $.ajax({url: base_url+'adm/get_servertime', 
-            async: false, 
-            dataType: 'text', 
-            success: function(text) { 
-                time = new Date(text); 
-            }, 
-            error: function(http, message, exc) { 
-                time = new Date(); 
-            }
-        }); 
-        return time; 
-    }
 
     back = function() {
         var back  = $(".back").attr('rel');
@@ -247,6 +245,7 @@
         
         $(".back").attr('rel', (back-1));
         $(".next").attr('rel', (back+1));
+        $(".ragu_ragu").attr('rel', (back));
         
         $(".step").hide();
         $("#widget_"+back).show();
@@ -268,10 +267,12 @@
         simpan();
     }
 
-
     tidak_jawab = function() {
         var id_step = $(".ragu_ragu").attr('rel');
-        $("#widget_"+id_step+" input[type=radio]").attr("checked", false);
+        $("#rg_"+id_step).val('Y');
+        $("#btn_soal_"+id_step).removeClass('btn-success');
+        $("#btn_soal_"+id_step).removeClass('btn-default');
+        $("#btn_soal_"+id_step).addClass('btn-warning');
         simpan_sementara();
         simpan();
     }
@@ -279,6 +280,7 @@
     buka = function(id_widget) {
         $(".next").attr('rel', (id_widget+1));
         $(".back").attr('rel', (id_widget-1));
+        $(".ragu_ragu").attr('rel', (id_widget));
 
         $("#soalke").html(id_widget);
         
@@ -287,7 +289,7 @@
     }
 
     simpan_akhir = function() {
-        if (confirm('Anda yakin akan mengakhiri tes ini..?')) {
+        if (confirm('Ujian telah selesai. Anda yakin akan mengakhiri tes ini..?')) {
             var f_asal  = $("#_form");
             var form  = getFormData(f_asal);
 
