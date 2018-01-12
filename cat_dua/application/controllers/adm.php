@@ -30,7 +30,6 @@ class Adm extends CI_Controller {
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
 		
 		$a['p']			= "v_main";
-		$a['menu']		= gen_menu();
 		
 		$this->load->view('aaa', $a);
 	}
@@ -44,7 +43,6 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
 
 
 		//var def uri segment
@@ -212,7 +210,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -378,7 +376,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -460,7 +458,6 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
 
 		$a['huruf_opsi'] = array("a","b","c","d","e");
 		$a['jml_opsi'] = $this->config->item('jml_opsi');
@@ -802,7 +799,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -877,8 +874,7 @@ class Adm extends CI_Controller {
 
 				$this->db->query("INSERT INTO tr_guru_tes VALUES (null, '".$a['sess_konid']."', '".bersih($p,"mapel")."',
 								'".bersih($p,"nama_ujian")."', '".bersih($p,"jumlah_soal")."', '".bersih($p,"waktu")."', '".bersih($p,"acak")."', 
-								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', '".
-								bersih($p,"terlambat")."', '$token')");
+								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', '$token')");
 			}
 			
 			$ret_arr['status'] 	= "ok";
@@ -970,7 +966,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1101,7 +1097,6 @@ class Adm extends CI_Controller {
 	public function hasil_ujian_cetak() {
 		$this->cek_aktif();
 		
-		$a['menu']		= gen_menu();
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1125,12 +1120,13 @@ class Adm extends CI_Controller {
 	/* == SISWA == */
 	public function ikuti_ujian() {
 		$this->cek_aktif();
+		cek_hakakses(array("siswa"), $this->session->userdata('admin_level'));
 		
 		//var def session
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1158,12 +1154,13 @@ class Adm extends CI_Controller {
 	}
 	public function ikut_ujian() {
 		$this->cek_aktif();
+		cek_hakakses(array("siswa"), $this->session->userdata('admin_level'));
 		
 		//var def session
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1427,7 +1424,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
@@ -1469,7 +1466,7 @@ class Adm extends CI_Controller {
 		$a['sess_level'] = $this->session->userdata('admin_level');
 		$a['sess_user'] = $this->session->userdata('admin_user');
 		$a['sess_konid'] = $this->session->userdata('admin_konid');
-		$a['menu']		= gen_menu();
+
 		//var def uri segment
 		$uri2 = $this->uri->segment(2);
 		$uri3 = $this->uri->segment(3);
