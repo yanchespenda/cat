@@ -56,47 +56,40 @@ $(document).ready(function() {
 });
 
 function timer() {
+	var tgl_sekarang = $("#_tgl_sekarang").val();
 	var tgl_mulai = $("#_tgl_mulai").val();
+    var tgl_terlambat = $("#_terlambat").val();
 	var id_ujian = $("#id_ujian").val();
 
-    var waktu_selesai = new Date(tgl_mulai);
-    
+    $('#btn_mulai').countdowntimer({
+        startDate : tgl_sekarang,
+        dateAndTime : tgl_mulai,
+        size : "lg",
+ 		timeUp : timeIsUp,
+    });
+
+}
+
+function timeIsUp() {
+	var id_ujian = $("#id_ujian").val();
+	$("#btn_mulai").html('<a href="#" class="btn btn-success btn-lg" id="tbl_mulai" onclick="return konfirmasi_token('+id_ujian+')"><i class="fa fa-check-circle"></i> MULAI</a>');
+
+	var tgl_sekarang = $("#_tgl_sekarang").val();
+	var tgl_mulai = $("#_tgl_mulai").val();
     var tgl_terlambat = $("#_terlambat").val();
-	var waktu_terlambat = new Date(tgl_terlambat);
 
-    $("#btn_mulai").show();
-	$("#tbl_mulai").hide();
-    $("#ujian_selesai").hide();
+	$('#waktu_akhir_ujian').countdowntimer({
+        startDate : tgl_sekarang,
+        dateAndTime : tgl_terlambat,
+        size : "lg",
+ 		timeUp : hilangkan_tombol,
+    });
+}
 
-    $("#btn_mulai").countdown(
-        {
-        	until: waktu_selesai, 
-        	format: 'HMS', 
-        	compact: true, 
-        	alwaysExpire: true,
-        	onExpiry: function() {
-        		
-        		$("#btn_mulai").hide();
-				$("#tbl_mulai").show();
-			    $("#ujian_selesai").hide();
-
-     			
-			    $("#_terlambat").countdown(
-			        {
-			        	until: waktu_terlambat, 
-			        	format: 'HMS', 
-			        	compact: true, 
-			        	alwaysExpire: true,
-			        	onExpiry: function() {
-			        		$("#ujian_selesai").show();
-			        		$("#btn_mulai").hide();
-			        		$("#tbl_mulai").hide();
-			        	}
-			        }
-			    );
-        	}
-        }
-    );
+function hilangkan_tombol() {
+	$("#btn_mulai").hide();
+	$("#waktu_").hide();
+	$("#waktu_game_over").html('<a class="btn btn-danger btn-lg" onclick="return alert(\'Waktu selesai..!\');">Waktu Ujian Selesai</a>');
 }
 
 
@@ -204,6 +197,7 @@ function m_ujian_e(id) {
 			$("#jumlah_soal").val(data.jumlah_soal);
 			$("#waktu").val(data.waktu);
 			$("#terlambat").val(data.terlambat);
+			$("#terlambat2").val(data.terlambat2);
 			$("#tgl_mulai").val(data.tgl_mulai);
 			$("#wkt_mulai").val(data.wkt_mulai);
 			$("#acak").val(data.jenis);
