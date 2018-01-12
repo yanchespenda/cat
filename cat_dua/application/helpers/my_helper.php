@@ -198,6 +198,8 @@ function gen_menu() {
 	  }
 	}
 
+
+	
 	if ($menu != null) {
 		echo '
 		<div class="container" style="margin-top: 70px">
