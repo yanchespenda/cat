@@ -768,7 +768,7 @@ class Adm extends CI_Controller {
 		            $data_ok[0] = $no++;
 		            $data_ok[1] = substr($d['soal'], 0, 300);
 		            $data_ok[2] = $d['nmmapel'].'<br>'.$d['nmguru'];
-		            $data_ok[3] = "Jml dipakai : ".($d['jml_benar']+$d['jml_salah'])."<br>Benar: ".$d['jml_benar'].", Salah: ".$d['jml_salah'];
+		            $data_ok[3] = "Jml dipakai : ".($d['jml_benar']+$d['jml_salah'])."<br>Benar: ".$d['jml_benar'].", Salah: ".$d['jml_salah']."<br>Persentase benar : ".number_format(($d['jml_benar'] / ($d['jml_benar']+$d['jml_salah'])) * 100 )." %";
 		            $data_ok[4] = '<div class="btn-group">
 	                          <a href="'.base_url().'adm/m_soal/edit/'.$d['id'].'" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-pencil" style="margin-left: 0px; color: #fff"></i> &nbsp;&nbsp;Edit</a>
 	                          <a href="'.base_url().'adm/m_soal/hapus/'.$d['id'].'" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove" style="margin-left: 0px; color: #fff"></i> &nbsp;&nbsp;Hapus</a>
