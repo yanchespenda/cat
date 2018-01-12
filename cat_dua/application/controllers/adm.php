@@ -1175,8 +1175,9 @@ class Adm extends CI_Controller {
 			for ($i = 1; $i < $p->jml_soal; $i++) {
 				$_tjawab 	= "opsi_".$i;
 				$_tidsoal 	= "id_soal_".$i;
+				$_ragu 		= "rg_".$i;
 				$jawaban_ 	= empty($p->$_tjawab) ? "" : $p->$_tjawab;
-				$update_	.= "".$p->$_tidsoal.":".$jawaban_.",";
+				$update_	.= "".$p->$_tidsoal.":".$jawaban_.":".$p->$_ragu.",";
 			}
 			$update_		= substr($update_, 0, -1);
 			$this->db->query("UPDATE tr_ikut_ujian SET list_jawaban = '".$update_."' WHERE id_tes = '$uri4' AND id_user = '".$a['sess_konid']."'");
@@ -1189,8 +1190,8 @@ class Adm extends CI_Controller {
 			$hasil 		= array();
 			foreach ($ret_urn as $key => $value) {
 				$pc_ret_urn = explode(":", $value);
-				$idx 		= $pc_ret_urn['0'];
-				$val 		= $pc_ret_urn['1'];
+				$idx 		= $pc_ret_urn[0];
+				$val 		= $pc_ret_urn[1].'_'.$pc_ret_urn[2];
 				$hasil[]= $val;
 			}
 
@@ -1214,17 +1215,25 @@ class Adm extends CI_Controller {
 				$_tjawab 	= "opsi_".$i;
 				$_tidsoal 	= "id_soal_".$i;
 				$jawaban_ 	= empty($p->$_tjawab) ? "" : $p->$_tjawab;
+				$_ragu 		= "rg_".$i;
+
 				$cek_jwb 	= $this->db->query("SELECT bobot, jawaban FROM m_soal WHERE id = '".$p->$_tidsoal."'")->row();
 				//untuknilai bobot
 				$bobotnya 	= $cek_jwb->bobot;
 				$array_bobot[$bobotnya] = empty($array_bobot[$bobotnya]) ? 1 : $array_bobot[$bobotnya] + 1;
 				
 				$q_update_jwb = "";
-				if ($cek_jwb->jawaban == $jawaban_) {
-					//jika jawaban benar
-					$jumlah_benar++;
-					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 1 : $array_nilai[$bobotnya] + 1;
-					$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$p->$_tidsoal."'";
+				if (($cek_jwb->jawaban == $jawaban_)) {
+					if ($p->$_ragu != 'Y') {
+						//jika jawaban benar dan tidak ragu-ragu
+						$jumlah_benar++;
+						$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 1 : $array_nilai[$bobotnya] + 1;
+						$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$p->$_tidsoal."'";
+					} else {
+						//jika ragu-ragu, dianggap salah
+						$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 0 : $array_nilai[$bobotnya] + 0;
+						$q_update_jwb = "UPDATE m_soal SET jml_salah = jml_salah + 1 WHERE id = '".$p->$_tidsoal."'";
+					}
 				} else {
 					//jika jawaban salah
 					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 0 : $array_nilai[$bobotnya] + 0;
@@ -1233,7 +1242,7 @@ class Adm extends CI_Controller {
 
 				$this->db->query($q_update_jwb);
 
-				$update_	.= "".$p->$_tidsoal.":".$jawaban_.",";
+				$update_	.= "".$p->$_tidsoal.":".$jawaban_.":".$p->$_ragu.",";
 			}
 			//perhitungan nilai bobot
 			ksort($array_bobot);
@@ -1363,8 +1372,9 @@ class Adm extends CI_Controller {
 				  $pc_v = explode(":", $v);
 				  $idx = $pc_v[0];
 				  $val = $pc_v[1];
+				  $rg = $pc_v[2];
 
-				  $arr_jawab[$idx] = $val;
+				  $arr_jawab[$idx] = array("j"=>$val,"r"=>$rg);
 				}
 
 				$html = '';
@@ -1372,8 +1382,10 @@ class Adm extends CI_Controller {
 				if (!empty($soal_urut_ok)) {
 				    foreach ($soal_urut_ok as $d) { 
 				        $tampil_media = tampil_media("./upload/gambar_soal/".$d->file, 'auto','auto');
+				        $vrg = $arr_jawab[$d->id]["r"] == "" ? "N" : $arr_jawab[$d->id]["r"];
 
 				        $html .= '<input type="hidden" name="id_soal_'.$no.'" value="'.$d->id.'">';
+				        $html .= '<input type="hidden" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
 				        $html .= '<div class="step" id="widget_'.$no.'">';
 
 				        $html .= '<p>'.$d->soal.'</p><p>'.$tampil_media.'</p><div class="funkyradio">';
@@ -1381,7 +1393,7 @@ class Adm extends CI_Controller {
 				        for ($j = 0; $j < $this->config->item('jml_opsi'); $j++) {
 				            $opsi = "opsi_".$this->opsi[$j];
 
-				            $checked = $arr_jawab[$d->id] == strtoupper($this->opsi[$j]) ? "checked" : "";
+				            $checked = $arr_jawab[$d->id]["j"] == strtoupper($this->opsi[$j]) ? "checked" : "";
 
 				            $pc_pilihan_opsi = explode("#####", $d->$opsi);
 
