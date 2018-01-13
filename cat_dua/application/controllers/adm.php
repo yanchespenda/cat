@@ -1224,16 +1224,10 @@ class Adm extends CI_Controller {
 				
 				$q_update_jwb = "";
 				if (($cek_jwb->jawaban == $jawaban_)) {
-					if ($p->$_ragu != 'Y') {
-						//jika jawaban benar dan tidak ragu-ragu
-						$jumlah_benar++;
-						$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 1 : $array_nilai[$bobotnya] + 1;
-						$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$p->$_tidsoal."'";
-					} else {
-						//jika ragu-ragu, dianggap salah
-						$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 0 : $array_nilai[$bobotnya] + 0;
-						$q_update_jwb = "UPDATE m_soal SET jml_salah = jml_salah + 1 WHERE id = '".$p->$_tidsoal."'";
-					}
+					//jika jawaban benar 
+					$jumlah_benar++;
+					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 1 : $array_nilai[$bobotnya] + 1;
+					$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$p->$_tidsoal."'";
 				} else {
 					//jika jawaban salah
 					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 0 : $array_nilai[$bobotnya] + 0;
@@ -1364,7 +1358,6 @@ class Adm extends CI_Controller {
 					$soal_urut_ok = $soal_urut_ok;
 				}
 
-
 				$pc_list_jawaban = explode(",", $detil_tes->list_jawaban);
 
 				$arr_jawab = array();
@@ -1388,7 +1381,7 @@ class Adm extends CI_Controller {
 				        $html .= '<input type="hidden" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
 				        $html .= '<div class="step" id="widget_'.$no.'">';
 
-				        $html .= '<p>'.$d->soal.'</p><p>'.$tampil_media.'</p><div class="funkyradio">';
+				        $html .= $d->soal.'<br>'.$tampil_media.'<div class="funkyradio">';
 
 				        for ($j = 0; $j < $this->config->item('jml_opsi'); $j++) {
 				            $opsi = "opsi_".$this->opsi[$j];
