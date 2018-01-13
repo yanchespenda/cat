@@ -2,6 +2,7 @@
   <div class="panel panel-info">
     <div class="panel-heading">Daftar Ujian / Tes</div>
     <div class="panel-body">
+      <div style="overflow: auto">
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -49,8 +50,8 @@
             ?>
           </tbody>
         </table>
-
-       </div>
+        </div>  
+      </div>
     </div>
   </div>
 </div>
