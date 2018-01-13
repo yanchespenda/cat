@@ -19,25 +19,32 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand"><i class="fa fa-home"></i> <?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi'); ?></a>
+            <a class="navbar-brand"><i class="glyphicon glyphicon-user"></i> <?php echo $this->session->userdata('admin_nama'); ?></a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $this->session->userdata('admin_nama')." (".$this->session->userdata('admin_user').")"; ?> <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" onclick="return rubah_password();">Ubah Password</a></li>
-                        <li><a href="<?php echo base_url(); ?>adm/logout" onclick="return confirm('keluar..?');">Logout</a></li>
-                    </ul>
-                </li>
+            <ul class="nav navbar-nav navbar-right" style="z-index: 1000">
+                <li><a href="<?php echo base_url(); ?>adm/logout" onclick="return confirm('keluar..?');"><i class="glyphicon glyphicon-share"></i> Logout</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 
-<div class="container col-md-12" style="margin-top: 70px">
+<div class="floating container">
+    <a id="tbl_show_jawaban" href="#" onclick="return show_jawaban()" class="btn btn-info" title="Tampilkan bilah jawaban"><i class="glyphicon glyphicon-search"></i> Lihat Jawaban</a>
+</div>
+
+<div class="dmobile">
+    <div class="col-md-3" id="v_jawaban">
+        <div class="panel panel-info">
+            <div class="panel-heading" id="nav_soal">Navigasi Soal</div>
+            <div class="panel-body">
+                <div id="tampil_jawaban"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-9">
         <form role="form" name="_form" method="post" id="_form">
             <div class="panel panel-default">
@@ -48,38 +55,32 @@
                     </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" style="overflow: auto">
                 <?php echo $html; ?>
                 </div>
 
-                <div class="panel-footer">
-                    <a class="action back btn btn-info btn-lg" rel="0" onclick="return back();"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+                <div class="panel-footer text-center">
+                    <a class="action back btn btn-info" rel="0" onclick="return back();"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
 
-                    <a class="action next btn btn-info btn-lg" rel="2" onclick="return next();"><i class="glyphicon glyphicon-chevron-right"></i> Next</a>
+                    <a class="action next btn btn-info" rel="2" onclick="return next();"><i class="glyphicon glyphicon-chevron-right"></i> Next</a>
 
-                    <a class="ragu_ragu btn btn-danger btn-lg" rel="1" onclick="return tidak_jawab();"><i class="glyphicon glyphicon-stop"></i> Ragu-ragu</a>
+                    <a class="ragu_ragu btn btn-warning" rel="1" onclick="return tidak_jawab();">Ragu-ragu</a>
                     
-                    <a class="action submit btn btn-danger btn-lg pull-right" onclick="return simpan_akhir();"><i class="glyphicon glyphicon-stop"></i> Selesai Ujian</a>
-                    <input type="hidden" name="jml_soal" value="<?php echo $no; ?>">
+                    <a class="selesai action submit btn btn-danger" onclick="return simpan_akhir();"><i class="glyphicon glyphicon-stop"></i> Selesai</a>
+
+                    <input type="hidden" name="jml_soal" id="jml_soal" value="<?php echo $no; ?>">
                 </div>
             </div>
         </form>
     </div>
 
-    <div class="col-md-3">
-        <div class="panel panel-info">
-            <div class="panel-heading" id="nav_soal">Navigasi Soal</div>
-            <div class="panel-body">
-                <div id="tampil_jawaban"></div>
-            </div>
-        </div>
-    </div>
+</div>
 
+<!--
+<div class="col-md-12 footer">
+ <a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi')."</a><br> Waktu Server: ".tjs(date('Y-m-d H:i:s'),"s")." - Waktu Database: ".tjs($this->waktu_sql,"s"); ?>. 
 </div>
-  
-<div class="col-md-12" style="border-top: solid 4px #ddd; text-align: center; padding-top: 10px; margin-top: 50px; margin-bottom: 20px">
-    &copy; 2017 <a href="<?php echo base_url(); ?>adm"><?php echo $this->config->item('nama_aplikasi')." ".$this->config->item('versi')."</a> <br> Waktu Server: ".tjs(date('Y-m-d H:i:s'),"s")." - Waktu Database: ".tjs($this->waktu_sql,"s"); ?>. 
-</div>
+-->
 
 
 <script src="<?php echo base_url(); ?>___/js/jquery-1.11.3.min.js"></script> 
@@ -195,6 +196,7 @@
             startDate : tgl_mulai,
             dateAndTime : tgl_selesai,
             size : "lg",
+            displayFormat: "HMS",
             timeUp : selesai,
         });
     }
@@ -218,6 +220,8 @@
         $(".next").attr('rel', (berikutnya+1));
         $(".back").attr('rel', (berikutnya-1));
         $(".ragu_ragu").attr('rel', (berikutnya));
+        cek_status_ragu(berikutnya);
+        cek_terakhir(berikutnya);
         
         var sudah_akhir = berikutnya == total_widget ? 1 : 0;
 
@@ -246,6 +250,8 @@
         $(".back").attr('rel', (back-1));
         $(".next").attr('rel', (back+1));
         $(".ragu_ragu").attr('rel', (back));
+        cek_status_ragu(back);
+        cek_terakhir(back);
         
         $(".step").hide();
         $("#widget_"+back).show();
@@ -269,18 +275,53 @@
 
     tidak_jawab = function() {
         var id_step = $(".ragu_ragu").attr('rel');
-        $("#rg_"+id_step).val('Y');
-        $("#btn_soal_"+id_step).removeClass('btn-success');
-        $("#btn_soal_"+id_step).removeClass('btn-default');
-        $("#btn_soal_"+id_step).addClass('btn-warning');
+        var status_ragu = $("#rg_"+id_step).val();
+
+        if (status_ragu == "N") {
+            $("#rg_"+id_step).val('Y');
+            $("#btn_soal_"+id_step).removeClass('btn-success');
+            $("#btn_soal_"+id_step).addClass('btn-warning');
+
+        } else {
+            $("#rg_"+id_step).val('N');
+            $("#btn_soal_"+id_step).removeClass('btn-warning');
+            $("#btn_soal_"+id_step).addClass('btn-success');
+        }
+
+
+        cek_status_ragu(id_step);
+
         simpan_sementara();
         simpan();
     }
-    
+
+    cek_status_ragu = function(id_soal) {
+        var status_ragu = $("#rg_"+id_soal).val();
+
+        if (status_ragu == "N") {
+            $(".ragu_ragu").html('Ragu');
+        } else {
+            $(".ragu_ragu").html('Tidak Ragu');
+        }
+    }
+
+    cek_terakhir = function(id_soal) {
+        var jml_soal = $("#jml_soal").val();
+        jml_soal = (parseInt(jml_soal) - 1);
+
+        if (jml_soal == id_soal) {
+            $(".selesai").show();
+        } else {
+            $(".selesai").hide();
+        }
+    }
+
     buka = function(id_widget) {
         $(".next").attr('rel', (id_widget+1));
         $(".back").attr('rel', (id_widget-1));
         $(".ragu_ragu").attr('rel', (id_widget));
+        cek_status_ragu(id_widget);
+        cek_terakhir(id_widget);
 
         $("#soalke").html(id_widget);
         
@@ -309,6 +350,9 @@
         }
     }
 
-    </script> 
+    show_jawaban = function() {
+        $("#v_jawaban").toggle();
+    }
+    </script>
 </body>
 </html>
