@@ -1335,7 +1335,7 @@ class Adm extends CI_Controller {
 					if (!empty($q_soal)) {
 						foreach ($q_soal as $d) {
 							$list_id_soal .= $d->id.",";
-							$list_jw_soal .= $d->id.":,";
+							$list_jw_soal .= $d->id."::N,";
 						}
 					}
 					$list_id_soal = substr($list_id_soal, 0, -1);
