@@ -202,7 +202,6 @@ font-weight: bold;
   width: 55px;
 }
 #tampil_jawaban {
-  height: 400px;
   overflow: auto;
 }
 
@@ -369,3 +368,43 @@ text-align: center;
 }
 
 .zoom img::selection { background-color: transparent; }
+
+#tbl_show_jawaban {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    #v_jawaban {
+        display: none;
+    }
+    #tbl_show_jawaban {
+        display: block;
+    }
+    .dmobile {
+      margin-top: 100px;
+    }
+    .floating {
+        position: fixed;
+        top: 60px;
+        z-index: 1020;
+        width: 100%;
+        text-align: center;
+    }
+    #v_jawaban {
+      position: fixed;
+      top: 100px;
+      z-index: 1020;
+      width: 100%;
+      text-align: center;
+    }
+    .navbar-brand {
+      width: 80%;
+    }
+}
+
+
+@media (min-width: 640px) {
+  .dmobile {
+    margin-top: 70px;
+  }
+}
