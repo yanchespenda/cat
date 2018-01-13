@@ -26,7 +26,10 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                <ul class="nav navbar-nav navbar-right">
-                  <?php echo $menu['menu_atas']; ?>
+                  <?php 
+                  //$menu = gen_menu();
+                  //echo $menu['menu_atas']; 
+                  ?>
                   <li class="dropdown">
                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $this->session->userdata('admin_nama')." (".$this->session->userdata('admin_user').")"; ?> <span class="caret"></span></a>
                      <ul class="dropdown-menu" role="menu">
@@ -38,7 +41,7 @@
             </div>
          </div>
       </nav>
-      <?php echo $menu['menu_bawah']; ?>
+      <?php echo gen_menu(); ?>
       
       <?php echo $this->load->view($p); ?>
    
