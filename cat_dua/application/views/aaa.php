@@ -73,7 +73,7 @@ if ($this->uri->segment(2) == "m_soal" && $this->uri->segment(3) == "edit") {
 <script src="<?php echo base_url(); ?>___/plugin/datatables/dataTables.bootstrap.min.js"></script>
 
 <script src="<?php echo base_url(); ?>___/plugin/jquery_zoom/jquery.zoom.min.js"></script> 
-<script src="http://infosa-media.net/cd2/jquery.countdownTimer.js"></script> 
+<script src="<?php echo base_url(); ?>___/plugin/countdown/jquery.countdownTimer.js"></script> 
 
 
 <script type="text/javascript">
